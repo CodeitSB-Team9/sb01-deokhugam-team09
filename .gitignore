@@ -4,6 +4,11 @@
 # Log file
 *.log
 
+# 환경변수
+.env
+*.env
+.env*
+
 # BlueJ files
 *.ctxt
 
