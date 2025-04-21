@@ -17,6 +17,8 @@ FROM amazoncorretto:17-alpine-jdk
 
 WORKDIR /app
 
-COPY --from=builder /app/build/libs/${PROJECT_NAME}-${PROJECT_VERSION}.jar ./
+ENV JVM_OPTS="-Xms512m -Xmx1024m"
 
-ENTRYPOINT ["sh", "-c", "java ${JVM_OPTS} -jar build/libs/${PROJECT_NAME}-${PROJECT_VERSION}.jar"]
+COPY --from=builder /app/build/libs/deokhugam.jar ./
+
+ENTRYPOINT ["sh", "-c", "java ${JVM_OPTS} -jar build/libs/deokhugam.jar"]
