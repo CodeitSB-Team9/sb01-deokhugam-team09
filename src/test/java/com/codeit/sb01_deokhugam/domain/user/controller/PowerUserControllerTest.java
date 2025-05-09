@@ -1,4 +1,4 @@
-package com.codeit.sb01_deokhugam.ranking.poweruser.controller;
+package com.codeit.sb01_deokhugam.domain.user.controller;
 
 import static io.restassured.RestAssured.*;
 import static org.assertj.core.api.Assertions.*;
@@ -11,9 +11,9 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -40,7 +40,7 @@ class PowerUserControllerTest {
 	@Autowired
 	private PowerUserRankingRepository powerUserRankingRepository;
 
-	@MockBean // To avoid running actual batch logic
+	@Mock // To avoid running actual batch logic
 	private PopularReviewBatchService popularReviewBatchService;
 
 	@BeforeEach
