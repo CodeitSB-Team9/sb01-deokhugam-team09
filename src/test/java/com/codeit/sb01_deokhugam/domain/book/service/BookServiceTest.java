@@ -1,5 +1,6 @@
 package com.codeit.sb01_deokhugam.domain.book.service;
 
+import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
@@ -50,6 +51,7 @@ import com.codeit.sb01_deokhugam.domain.book.repository.PopularBookRepository;
 import com.codeit.sb01_deokhugam.domain.review.entity.Review;
 import com.codeit.sb01_deokhugam.domain.review.repository.ReviewRepository;
 import com.codeit.sb01_deokhugam.domain.user.entity.User;
+import com.codeit.sb01_deokhugam.global.dto.response.PageResponse;
 import com.codeit.sb01_deokhugam.global.enumType.Period;
 import com.codeit.sb01_deokhugam.global.naver.NaverBookClient;
 import com.codeit.sb01_deokhugam.global.s3.S3Service;
@@ -95,7 +97,9 @@ public class BookServiceTest {
 	private Book book3;
 	private Book book4;
 	private Book mockBook;//Mock으로 만든 Book 객체, verify에서 사용된다.
-	private BookDto bookDto;
+	private BookDto bookDto1;
+	private BookDto bookDto2;
+	private BookDto bookDto4;
 	private MultipartFile multipartFile;
 	private Instant created;
 	private Instant updated;
@@ -163,11 +167,23 @@ public class BookServiceTest {
 		);
 		ReflectionTestUtils.setField(book4, "id", bookId4);
 
-		bookDto = new BookDto(
+		bookDto1 = new BookDto(
 			"저자", created,
 			"책입니다.", bookId1,
 			"12345678", LocalDate.parse("2025-01-01"), "출판사",
 			new BigDecimal("5.0"), 0, "https://test.com", "제목", updated
+		);
+		bookDto2 = new BookDto(
+			"저자 2", created,
+			"설명 2", bookId2,
+			"23456789", LocalDate.parse("2025-01-02"), "출판사 2",
+			new BigDecimal("4.5"), 0, "https://test2.com", "책 제목 2", updated
+		);
+		bookDto4 = new BookDto(
+			"저자 4", created,
+			"설명 4", bookId4,
+			"44467890", LocalDate.parse("2025-01-04"), "출판사 4",
+			new BigDecimal("4.0"), 0, "https://test4.com", "책 제목4", updated
 		);
 
 		multipartFile = Mockito.mock(MultipartFile.class);
@@ -203,7 +219,7 @@ public class BookServiceTest {
 			given(s3SeService.upload(any(MultipartFile.class), eq("QBook")))
 				.willReturn("https://test.com");
 			given(bookRepository.save(any(Book.class))).willReturn(book1);
-			given(bookMapper.toDto(any(Book.class))).willReturn(bookDto);
+			given(bookMapper.toDto(any(Book.class))).willReturn(bookDto1);
 
 			// when
 			BookDto result = bookService.create(bookCreateRequest, multipartFile);
@@ -214,7 +230,7 @@ public class BookServiceTest {
 			//DB에 도서가 저장된다.
 			verify(bookRepository).save(any(Book.class));
 
-			assertEquals(bookDto, result);
+			assertEquals(bookDto1, result);
 		}
 
 		//중복 isbn 체크
@@ -238,26 +254,70 @@ public class BookServiceTest {
 	@Nested
 	@DisplayName("도서 목록 조회 테스트")
 	class testSearchBooks {
-		private String keyword = "자바";
+		private String keyword = null;
 		private Instant after = null;
 		private String cursor = null;
 		private String orderBy = "title";
 		private String direction = "desc";
 		private int limit = 2;
+		private List<Book> books; //도서 목록 조회 bookRepository.findListByCursor에서 반환되는 책리스트
+		private List<BookDto> bookDtos; //books의 Book을 dto로 변환한 리스트
+
+		@BeforeEach
+		void setUp() {
+			// 논리적 삭제된 book3은 포함하지않음
+			books = Arrays.asList(book4, book2, book1);
+			// 실제로 보여줄 limit 수만큼 dto를 자른다
+			bookDtos = Arrays.asList(bookDto4, bookDto2);
+		}
 
 		@Test
 		@DisplayName("커서와 after 없이 내림차순 도서 목록 조회를 성공한다.")
 		void testSearchBooks_withoutCursorAndAfter_returnsBooks() {
 			//given
-			List<Book> books;
+			given(bookRepository.findListByCursor(keyword, after, cursor, orderBy, direction, limit + 1)).willReturn(
+				books);
+			given(bookMapper.toDto(book4)).willReturn(bookDto4);
+			given(bookMapper.toDto(book2)).willReturn(bookDto2);
+			given(bookRepository.getTotalElements(keyword)).willReturn((long)3);
+
+			//when
+			PageResponse<BookDto> response = bookService.findAllWithCursor(keyword, after, cursor, orderBy, direction,
+				limit);
+
+			//then
+			assertEquals(2, response.getContent().size());
+			//내림차순 정렬되었는가
+			assertEquals(bookDto4, response.getContent().get(0));
+			assertThat(response.isHasNext()).isTrue();
+			assertThat(response.getNextCursor()).isEqualTo(book2.getTitle());
+
 		}
 
 		@Test
 		@DisplayName("유효하지 않은 정렬 기준을 입력하여 도서 목록 조회를 실패한다.")
 		void testSearchBooks_withInvalidOrderBy_returnsFail() {
 			//given
+			orderBy = "invalid";
+
+			//when&then
+			assertThrows(IllegalArgumentException.class, () -> {
+				bookService.findAllWithCursor(keyword, after, cursor, orderBy, direction, limit);
+			});
 		}
 	}
+
+	// @Nested
+	// @DisplayName("인기 도서 목록 조회 테스트")
+	// class testSearchPopularBooks{
+	// 	@BeforeEach
+	// 	void setUp() {
+	//
+	// 	}
+	//
+	// 	@Test
+	// 	@DisplayName("")
+	// }
 
 	@Nested
 	@DisplayName("도서 상세 조회 테스트")
@@ -267,13 +327,13 @@ public class BookServiceTest {
 		void testFindBook_returnsBook() {
 			//given
 			given(bookRepository.findByIdNotLogicalDelete(bookId1)).willReturn(Optional.of(book1));
-			given(bookMapper.toDto(any(Book.class))).willReturn(bookDto);
+			given(bookMapper.toDto(any(Book.class))).willReturn(bookDto1);
 
 			//when
 			BookDto result = bookService.findById(bookId1);
 
 			//then'
-			assertEquals(bookDto, result);
+			assertEquals(bookDto1, result);
 
 		}
 
@@ -412,6 +472,7 @@ public class BookServiceTest {
 			}
 
 		}
+
 	}
 
 	@Nested

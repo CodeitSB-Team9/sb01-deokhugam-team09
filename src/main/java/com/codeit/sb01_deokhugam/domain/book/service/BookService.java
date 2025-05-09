@@ -437,6 +437,4 @@ public class BookService {
 		popularBookRepository.deleteAll();
 	}
 
-	//TODO: 도서 리뷰 업데이트(리뷰서비스에서 호출? )
-
 }
