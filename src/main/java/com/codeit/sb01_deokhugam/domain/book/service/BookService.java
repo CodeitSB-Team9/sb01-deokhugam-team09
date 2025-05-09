@@ -316,9 +316,9 @@ public class BookService {
 		//totalElements 계산
 		Long totalElements = popularBookRepository.getTotalElements(period);
 
-		//nextCursor 조회
+		//nextCursor 조회, 마지막 요소의 rank
 		String nextCursor =
-			hasNext ? String.valueOf(cursor == null ? limit : Integer.parseInt(cursor) + limit) : null;
+			hasNext ? String.valueOf(popularBookDtos.get(size - 1).rank()) : null;
 
 		//nextAfter 조회
 		Instant nextAfter = hasNext ? popularBookDtos.get(size - 1).createdAt() : null;

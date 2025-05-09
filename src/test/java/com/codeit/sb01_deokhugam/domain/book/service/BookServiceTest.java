@@ -40,6 +40,7 @@ import net.sourceforge.tess4j.TesseractException;
 import com.codeit.sb01_deokhugam.domain.book.dto.BookCreateRequest;
 import com.codeit.sb01_deokhugam.domain.book.dto.BookDto;
 import com.codeit.sb01_deokhugam.domain.book.dto.BookUpdateRequest;
+import com.codeit.sb01_deokhugam.domain.book.dto.PopularBookDto;
 import com.codeit.sb01_deokhugam.domain.book.entity.Book;
 import com.codeit.sb01_deokhugam.domain.book.entity.BookRanking;
 import com.codeit.sb01_deokhugam.domain.book.exception.BookNotFoundException;
@@ -261,14 +262,11 @@ public class BookServiceTest {
 		private String direction = "desc";
 		private int limit = 2;
 		private List<Book> books; //도서 목록 조회 bookRepository.findListByCursor에서 반환되는 책리스트
-		private List<BookDto> bookDtos; //books의 Book을 dto로 변환한 리스트
 
 		@BeforeEach
 		void setUp() {
 			// 논리적 삭제된 book3은 포함하지않음
 			books = Arrays.asList(book4, book2, book1);
-			// 실제로 보여줄 limit 수만큼 dto를 자른다
-			bookDtos = Arrays.asList(bookDto4, bookDto2);
 		}
 
 		@Test
@@ -307,17 +305,72 @@ public class BookServiceTest {
 		}
 	}
 
-	// @Nested
-	// @DisplayName("인기 도서 목록 조회 테스트")
-	// class testSearchPopularBooks{
-	// 	@BeforeEach
-	// 	void setUp() {
-	//
-	// 	}
-	//
-	// 	@Test
-	// 	@DisplayName("")
-	// }
+	@Nested
+	@DisplayName("인기 도서 목록 조회 테스트")
+	class testSearchPopularBooks {
+		private Period period = Period.DAILY;
+		private String periodString = "DAILY";
+		private Instant after = null;
+		private String cursor = null;
+		private String direction = "desc";
+		private int limit = 2;
+		private List<BookRanking> bookRankings; //
+		private BookRanking bookRanking1;
+		private BookRanking bookRanking2;
+		private BookRanking bookRanking4;
+		private PopularBookDto popularBookDto1;
+		private PopularBookDto popularBookDto2;
+		private PopularBookDto popularBookDto4;
+
+		@BeforeEach
+		void setUp() {
+			//논리삭제된 도서(book3)는 제외
+			bookRanking1 = EntityProvider.createBookRanking(period, 1, new BigDecimal("7.5"), 2,
+				new BigDecimal("5.0"), bookId1);
+			bookRanking2 = EntityProvider.createBookRanking(period, 1, new BigDecimal("7.5"), 4,
+				new BigDecimal("3.0"), bookId2);
+			bookRanking4 = EntityProvider.createBookRanking(period, 3, new BigDecimal("4.5"), 2,
+				new BigDecimal("2.0"), bookId4);
+			bookRankings = Arrays.asList(bookRanking1, bookRanking2, bookRanking4);
+
+			popularBookDto1 = EntityProvider.createPopularBookDto(bookId1, period, 1, 7.5, 2, new BigDecimal("5.0"));
+			popularBookDto2 = EntityProvider.createPopularBookDto(bookId2, period, 1, 7.5, 4, new BigDecimal("3.0"));
+			popularBookDto4 = EntityProvider.createPopularBookDto(bookId4, period, 3, 4.5, 2, new BigDecimal("2.0"));
+
+		}
+
+		@Test
+		@DisplayName("DAILY 조회 기준으로 도서 랭킹을 조회한다.")
+		void testSearchPopularBooks_returnsBooks() {
+			given(popularBookRepository.findListByCursor(periodString, after, cursor, direction, limit + 1)).willReturn(
+				bookRankings);
+			given(popularBookMapper.toDto(bookRanking1)).willReturn(popularBookDto1);
+			given(popularBookMapper.toDto(bookRanking2)).willReturn(popularBookDto2);
+			given(popularBookRepository.getTotalElements(periodString)).willReturn(3L);
+
+			//when
+			PageResponse<PopularBookDto> response = bookService.findPopularBook(periodString, after, cursor, direction,
+				limit);
+
+			//then
+			assertEquals(2, response.getContent().size());
+			assertEquals(popularBookDto1, response.getContent().get(0));
+			assertThat(response.getNextCursor()).isEqualTo("1");
+
+		}
+
+		@Test
+		@DisplayName("Period가 enum에 속하지 않으면 예외를 발생한다.")
+		void testSearchPopularBooks_invalidPeriod_returnsFail() {
+			//given
+			periodString = "invalidPeriod";
+
+			//when&then
+			assertThrows(IllegalArgumentException.class, () -> {
+				bookService.findPopularBook(periodString, after, cursor, direction, limit);
+			});
+		}
+	}
 
 	@Nested
 	@DisplayName("도서 상세 조회 테스트")

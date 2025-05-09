@@ -1,12 +1,16 @@
 package com.codeit.sb01_deokhugam.util;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import com.codeit.sb01_deokhugam.domain.book.dto.PopularBookDto;
 import com.codeit.sb01_deokhugam.domain.book.entity.Book;
+import com.codeit.sb01_deokhugam.domain.book.entity.BookRanking;
 import com.codeit.sb01_deokhugam.domain.review.entity.Review;
 import com.codeit.sb01_deokhugam.domain.user.entity.User;
+import com.codeit.sb01_deokhugam.global.enumType.Period;
 
 public class EntityProvider {
 
@@ -30,6 +34,21 @@ public class EntityProvider {
 			10,
 			new BigDecimal("4.8"),
 			false
+		);
+	}
+
+	public static BookRanking createBookRanking(Period period, int rank, BigDecimal score, int reviewCount,
+		BigDecimal rating, UUID bookId) {
+		return new BookRanking(
+			period, rank, score, reviewCount, rating, "https://example.com/thumbnail.jpg",
+			"책 제목", "작가", bookId
+		);
+	}
+
+	public static PopularBookDto createPopularBookDto(UUID bookId, Period period, int rank, Double score,
+		int reviewCount, BigDecimal rating) {
+		return new PopularBookDto(
+			UUID.randomUUID(), bookId, "제목", "작가", "test.com", period, rank, score, reviewCount, rating, Instant.now()
 		);
 	}
 
