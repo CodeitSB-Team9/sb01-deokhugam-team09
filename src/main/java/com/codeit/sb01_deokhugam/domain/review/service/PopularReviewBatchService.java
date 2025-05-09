@@ -28,9 +28,9 @@ import com.codeit.sb01_deokhugam.domain.review.repository.PopularReviewRepositor
 import com.codeit.sb01_deokhugam.domain.review.repository.ReviewLikeRepository;
 import com.codeit.sb01_deokhugam.domain.review.repository.ReviewRepository;
 import com.codeit.sb01_deokhugam.domain.user.repository.UserRepository;
+import com.codeit.sb01_deokhugam.domain.user.service.PowerUserService;
 import com.codeit.sb01_deokhugam.global.enumType.Period;
 import com.codeit.sb01_deokhugam.global.schedule.utils.ScheduleUtils;
-import com.codeit.sb01_deokhugam.ranking.poweruser.service.PowerUserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

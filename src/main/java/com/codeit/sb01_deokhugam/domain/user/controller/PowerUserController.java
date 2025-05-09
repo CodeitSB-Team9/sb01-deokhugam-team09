@@ -1,4 +1,4 @@
-package com.codeit.sb01_deokhugam.ranking.poweruser.controller;
+package com.codeit.sb01_deokhugam.domain.user.controller;
 
 import java.time.Instant;
 
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codeit.sb01_deokhugam.domain.review.service.PopularReviewBatchService;
+import com.codeit.sb01_deokhugam.domain.user.dto.request.GetPowerUsersRequest;
+import com.codeit.sb01_deokhugam.domain.user.dto.response.PowerUserDto;
+import com.codeit.sb01_deokhugam.domain.user.service.PowerUserService;
 import com.codeit.sb01_deokhugam.global.dto.response.PageResponse;
 import com.codeit.sb01_deokhugam.global.enumType.Period;
-import com.codeit.sb01_deokhugam.ranking.poweruser.dto.request.GetPowerUsersRequest;
-import com.codeit.sb01_deokhugam.ranking.poweruser.dto.response.PowerUserDto;
-import com.codeit.sb01_deokhugam.ranking.poweruser.service.PowerUserService;
 
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;

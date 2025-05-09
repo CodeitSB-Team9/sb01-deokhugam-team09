@@ -1,4 +1,4 @@
-package com.codeit.sb01_deokhugam.ranking.poweruser.entity;
+package com.codeit.sb01_deokhugam.domain.user.entity;
 
 import java.math.BigDecimal;
 import java.util.UUID;

@@ -20,9 +20,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.codeit.sb01_deokhugam.domain.review.service.PopularReviewBatchService;
+import com.codeit.sb01_deokhugam.domain.user.entity.PowerUser;
+import com.codeit.sb01_deokhugam.domain.user.repository.PowerUserRankingRepository;
 import com.codeit.sb01_deokhugam.global.enumType.Period;
-import com.codeit.sb01_deokhugam.ranking.poweruser.entity.PowerUser;
-import com.codeit.sb01_deokhugam.ranking.poweruser.repository.PowerUserRankingRepository;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -163,7 +163,7 @@ class PowerUserControllerTest {
 		assertThat(result.getString("code")).contains("MethodArgumentTypeMismatchException");
 		assertThat(result.getString("message")).contains("Failed to convert");
 	}
-	
+
 	@DisplayName("파워유저 목록 조회 실패 테스트 - 잘못된 cursor 파라미터(문자열)")
 	@Test
 	void givenInvalidCursor_whenFindPowerUsers_thenReturn400() {

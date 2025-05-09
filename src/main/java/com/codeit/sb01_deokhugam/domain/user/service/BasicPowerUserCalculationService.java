@@ -1,4 +1,4 @@
-package com.codeit.sb01_deokhugam.ranking.poweruser.service;
+package com.codeit.sb01_deokhugam.domain.user.service;
 
 import java.time.Instant;
 import java.util.List;
@@ -7,10 +7,10 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.codeit.sb01_deokhugam.domain.user.entity.PowerUser;
+import com.codeit.sb01_deokhugam.domain.user.repository.PowerUserRankingRepository;
 import com.codeit.sb01_deokhugam.global.enumType.Period;
 import com.codeit.sb01_deokhugam.global.schedule.utils.ScheduleUtils;
-import com.codeit.sb01_deokhugam.ranking.poweruser.entity.PowerUser;
-import com.codeit.sb01_deokhugam.ranking.poweruser.repository.PowerUserRankingRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

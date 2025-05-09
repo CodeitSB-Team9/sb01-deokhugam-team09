@@ -1,4 +1,4 @@
-package com.codeit.sb01_deokhugam.ranking.poweruser.repository;
+package com.codeit.sb01_deokhugam.domain.user.repository;
 
 import java.time.Instant;
 import java.util.List;
@@ -8,8 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.codeit.sb01_deokhugam.ranking.poweruser.entity.PowerUser;
+import com.codeit.sb01_deokhugam.domain.user.entity.PowerUser;
 
+//todo 논리삭제된 유저는 연산에서 빼기
 public interface PowerUserRankingRepository extends JpaRepository<PowerUser, UUID> {
 	@Query(value = """
 			SELECT

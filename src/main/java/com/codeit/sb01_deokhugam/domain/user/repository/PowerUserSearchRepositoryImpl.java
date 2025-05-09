@@ -1,4 +1,4 @@
-package com.codeit.sb01_deokhugam.ranking.poweruser.repository;
+package com.codeit.sb01_deokhugam.domain.user.repository;
 
 import java.time.Instant;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import com.codeit.sb01_deokhugam.domain.user.dto.request.GetPowerUsersRequest;
+import com.codeit.sb01_deokhugam.domain.user.entity.PowerUser;
 import com.codeit.sb01_deokhugam.global.enumType.Period;
-import com.codeit.sb01_deokhugam.ranking.poweruser.dto.request.GetPowerUsersRequest;
-import com.codeit.sb01_deokhugam.ranking.poweruser.entity.PowerUser;
 import com.codeit.sb01_deokhugam.ranking.poweruser.entity.QPowerUser;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;

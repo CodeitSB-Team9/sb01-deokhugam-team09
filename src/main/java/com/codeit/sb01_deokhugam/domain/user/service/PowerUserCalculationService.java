@@ -1,4 +1,4 @@
-package com.codeit.sb01_deokhugam.ranking.poweruser.service;
+package com.codeit.sb01_deokhugam.domain.user.service;
 
 import com.codeit.sb01_deokhugam.global.enumType.Period;
 

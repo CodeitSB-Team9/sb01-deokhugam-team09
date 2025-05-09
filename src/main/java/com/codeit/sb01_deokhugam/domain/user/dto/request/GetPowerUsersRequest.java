@@ -1,4 +1,4 @@
-package com.codeit.sb01_deokhugam.ranking.poweruser.dto.request;
+package com.codeit.sb01_deokhugam.domain.user.dto.request;
 
 import java.time.Instant;
 
