@@ -74,8 +74,7 @@ public class ReviewController {
 		@RequestParam(name = "cursor", required = false) String cursor,
 		@RequestParam(name = "after", required = false) Instant after,
 		@RequestParam(name = "limit", defaultValue = "50") int limit,
-		@LoginUserId UUID loginUserId,
-		@RequestParam(name = "requestUserId", required = true) UUID requestUserId
+		@LoginUserId UUID loginUserId
 	) {
 		log.info("리뷰 목록 조회 요청 : {}, {}, {}", keyword, orderBy, direction);
 		PageResponse<ReviewDto> page = reviewService.searchReviews(
@@ -87,8 +86,7 @@ public class ReviewController {
 			cursor,
 			after,
 			limit,
-			loginUserId,
-			requestUserId
+			loginUserId
 		);
 		return ResponseEntity.ok(page);
 	}

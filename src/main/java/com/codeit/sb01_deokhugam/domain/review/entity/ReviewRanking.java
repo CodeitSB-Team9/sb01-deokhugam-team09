@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import com.codeit.sb01_deokhugam.domain.base.BaseEntity;
+import com.codeit.sb01_deokhugam.domain.review.entity.Review;
 import com.codeit.sb01_deokhugam.global.enumType.Period;
 
 import jakarta.persistence.Column;
@@ -69,7 +70,7 @@ public class ReviewRanking extends BaseEntity {
 	@Column(name = "rank", nullable = false)
 	private Integer rank;
 
-	@Column(name = "score", nullable = false, precision = 2, scale = 1)
+	@Column(name = "score", nullable = false, precision = 10, scale = 2)
 	private BigDecimal score;
 
 	@Column(name = "like_count", nullable = false)
@@ -77,6 +78,4 @@ public class ReviewRanking extends BaseEntity {
 
 	@Column(name = "comment_count", nullable = false)
 	private Integer commentCount;
-
-	// BaseEntity 로부터 `id : UUID` 와 `createdAt : Instant` 가 제공됩니다.
 }

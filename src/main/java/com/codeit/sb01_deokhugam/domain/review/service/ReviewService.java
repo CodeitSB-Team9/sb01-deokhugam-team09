@@ -1,8 +1,10 @@
 package com.codeit.sb01_deokhugam.domain.review.service;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -109,10 +111,8 @@ public class ReviewService {
 		String cursor,
 		Instant after,
 		int limit,
-		UUID loginUserId,
-		UUID requestUserId
+		UUID loginUserId
 	) {
-		// 1) DB에서 커서·필터·정렬·limit+1 로 한 방에 꺼내오기
 		List<Review> fetched = reviewRepository.findListByCursor(
 			filterUserId, filterBookId, keyword,
 			after, cursor,
@@ -120,23 +120,44 @@ public class ReviewService {
 			limit + 1
 		);
 
-		// 2) “다음 페이지가 있나” 판단 후 진짜 보여줄 만큼만 자르기
 		boolean hasNext = fetched.size() > limit;
 		List<Review> page = hasNext
 			? fetched.subList(0, limit)
 			: fetched;
 
-		// 3) 전체 건수 (페이징 UI용)
 		long total = reviewRepository.countByFilter(filterUserId, filterBookId, keyword);
 
-		// 4) 각 엔티티→DTO 매핑
-		//    이때 이미 엔티티에 setLikedByMe(...) 로 세팅해 두었다면
-		//    매퍼는 단순히 toDto(review)만 호출하면 됩니다.
 		List<ReviewDto> dtos = page.stream()
 			.map(reviewMapper::toDto)
 			.toList();
 
-		// 5) 다음 페이지 커서 계산
+		List<UUID> likedReviewIds = (loginUserId != null && !dtos.isEmpty())
+			? reviewLikeRepository.findReviewIdsByUserIdAndReviewIdIn(
+			loginUserId,
+			dtos.stream()
+				.map(dto -> dto.id())
+				.toList()
+		) : List.of();
+
+		Set<UUID> likedSet = new HashSet<>(likedReviewIds);
+		List<ReviewDto> calculatedDtos = dtos.stream()
+			.map(dto -> new ReviewDto(
+				dto.id(),
+				dto.bookId(),
+				dto.bookTitle(),
+				dto.bookThumbnailUrl(),
+				dto.userId(),
+				dto.userNickname(),
+				dto.content(),
+				dto.rating(),
+				dto.likeCount(),
+				dto.commentCount(),
+				likedSet.contains(dto.id()),
+				dto.createdAt(),
+				dto.updatedAt()
+			))
+			.toList();
+
 		String nextCursor = null;
 		Instant nextAfter = null;
 		if (hasNext && !page.isEmpty()) {
@@ -147,9 +168,8 @@ public class ReviewService {
 			nextAfter = last.getCreatedAt();
 		}
 
-		// 6) 제네릭 PageResponse에 담아서 반환
 		return new PageResponse<>(
-			dtos,
+			calculatedDtos,
 			nextAfter,
 			nextCursor,
 			dtos.size(),
@@ -249,7 +269,7 @@ public class ReviewService {
 		}
 
 		// ── 3) likedByMe 토글
-		review.setLikedByMe(likedAfter);
+		//review.setLikedByMe(likedAfter);
 
 		return reviewLikeMapper.toDto(rlEntity, likedAfter);
 	}

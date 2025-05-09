@@ -72,9 +72,8 @@ create table reviews
     content       varchar                  NOT NULL,
     rating        decimal(2, 1)            NOT NULL,
     like_count    integer                  NOT NULL default 0,
-    liked_by_me   BOOLEAN                  NOT NULL default FALSE,
-    comment_count integer                  NOT NULL default 0,
     is_deleted    BOOLEAN                  NOT NULL default FALSE,
+    comment_count integer                  NOT NULL default 0,
     user_id       uuid,
     book_id       uuid
 );
@@ -88,6 +87,9 @@ create table review_likes
     review_id  uuid,
     UNIQUE (user_id, review_id)
 );
+
+CREATE INDEX idx_review_likes_user_review
+    ON review_likes (user_id, review_id);
 
 -- book_rankings
 create table book_rankings

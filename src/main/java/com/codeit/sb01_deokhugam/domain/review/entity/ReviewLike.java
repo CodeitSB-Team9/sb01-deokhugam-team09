@@ -6,6 +6,7 @@ import com.codeit.sb01_deokhugam.domain.base.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
@@ -17,7 +18,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
 	name = "review_likes",
-	uniqueConstraints = @UniqueConstraint(columnNames = {"review_id", "user_id"})
+	uniqueConstraints = @UniqueConstraint(columnNames = {"review_id", "user_id"}),
+	indexes = @Index(name = "idx_review_likes_user_review", columnList = "user_id, review_id")
 )
 public class ReviewLike extends BaseEntity {
 
