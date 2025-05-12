@@ -62,8 +62,6 @@ public class BookService {
 	private final ReviewRepository reviewRepository;
 
 	private final S3Service s3Service;
-	//todo: 리뷰서비스 생기면 고치기
-	//private final ReviewService reviewService;
 
 	//S3이미지 저장 디렉토리
 	private final String directory = book.getClass().getSimpleName();
@@ -79,10 +77,27 @@ public class BookService {
 	@Transactional
 	public BookDto create(BookCreateRequest bookCreateRequest, MultipartFile thumnailImage) {
 
-		//isbn 중복 검증 - 논리적 삭제된 책 ISBN도 포함
-		if (bookRepository.existsByIsbn(bookCreateRequest.isbn())) {
+		// isbn 중복 검증
+		if (bookRepository.existsByIsbnAndDeletedFalse(bookCreateRequest.isbn())) {
 			throw new IsbnAlreadyExistsException().withIsbn(bookCreateRequest.isbn());
 		}
+		// 논리삭제된 책을 재등록하는 과정
+		else if (bookRepository.existsByIsbnAndDeletedTrue(bookCreateRequest.isbn())) {
+			Book deletedBook = bookRepository.findByIsbn(bookCreateRequest.isbn());
+			deletedBook.undoSoftDelete();  // is_deleted를 false로 변경
+			// 도서 정보를 업데이트
+			deletedBook.update(
+				bookCreateRequest.title(),
+				bookCreateRequest.author(),
+				bookCreateRequest.description(),
+				bookCreateRequest.publisher(),
+				bookCreateRequest.publishedDate(),
+				s3Service.upload(thumnailImage, directory)
+			);
+			return bookMapper.toDto(deletedBook);
+		}
+
+		/**새로운 isbn을 등록하는 과정**/
 
 		//S3에 이미지를 저장하고, url을 가져온다.
 		String imageUrl = s3Service.upload(thumnailImage, directory);

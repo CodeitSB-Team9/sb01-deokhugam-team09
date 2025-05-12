@@ -73,17 +73,14 @@ public class Book extends BaseUpdatableEntity {
 		this.thumbnailUrl = thumbnailUrl;
 	}
 
-	public void updateRating(BigDecimal rating) {
-		this.rating = rating;
-	}
-
-	public void updateReviewCount(int reviewCount) {
-		this.reviewCount = reviewCount;
-	}
-
 	//논리 삭제합니다.
 	public void softDelete() {
 		this.deleted = true;
+	}
+
+	//논리 삭제된 경우 재등록시 사용합니다.
+	public void undoSoftDelete() {
+		this.deleted = false;
 	}
 
 	//논리적 삭제에 따른 존재 여부를 반환합니다.

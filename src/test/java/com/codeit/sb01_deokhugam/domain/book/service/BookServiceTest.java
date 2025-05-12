@@ -199,7 +199,8 @@ public class BookServiceTest {
 		void testAddBook_ReturnsBook() {
 
 			//given
-			given(bookRepository.existsByIsbn(eq(book1.getIsbn()))).willReturn(false);
+			given(bookRepository.existsByIsbnAndDeletedFalse(eq(book1.getIsbn()))).willReturn(false);
+			given(bookRepository.existsByIsbnAndDeletedTrue(eq(book1.getIsbn()))).willReturn(false);
 			given(s3SeService.upload(any(MultipartFile.class), eq("QBook")))
 				.willReturn("https://test.com");
 			given(bookRepository.save(any(Book.class))).willReturn(book1);
@@ -219,10 +220,10 @@ public class BookServiceTest {
 
 		//중복 isbn 체크
 		@Test
-		@DisplayName("중복된 isbn 등록을 시도하면 도서등록을 실패한다.")
+		@DisplayName("논리삭제되지않은 isbn 중복 등록을 시도하면 도서등록을 실패한다.")
 		void testAddBook_FailedCauseExistsIsbn() {
 
-			given(bookRepository.existsByIsbn(eq(book1.getIsbn()))).willReturn(true);
+			given(bookRepository.existsByIsbnAndDeletedFalse(eq(book1.getIsbn()))).willReturn(true);
 
 			// when & then
 			assertThrows(IsbnAlreadyExistsException.class, () -> {
