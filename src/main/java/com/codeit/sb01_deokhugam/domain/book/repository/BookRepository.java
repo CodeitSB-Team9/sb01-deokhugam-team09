@@ -32,4 +32,9 @@ public interface BookRepository extends JpaRepository<Book, UUID>, BookRepositor
 		""")
 	void recalcStats(@Param("bookId") UUID bookId);
 
+	Book findByIsbn(String isbn);
+
+	boolean existsByIsbnAndDeletedFalse(String isbn);
+
+	boolean existsByIsbnAndDeletedTrue(String isbn);
 }
