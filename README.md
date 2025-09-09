@@ -105,3 +105,27 @@ ISBN 정보를 기반으로 책 정보를 자동으로 불러와 리뷰와 감�
 <img src="https://github.com/user-attachments/assets/4ffaf03d-1cc4-4c70-a616-fb5202e8c590" width="500px" >
 </p>
 </div>
+
+## ✨ 발표 자료
+
+![9팀_덕후감_발표자료_page-0003](https://github.com/user-attachments/assets/5268db5a-26a2-492c-bd5a-708ec8f46f3f)
+![9팀_덕후감_발표자료_page-0004](https://github.com/user-attachments/assets/6be08ce1-576d-4301-9589-bd8d1610f56f)
+![9팀_덕후감_발표자료_page-0005](https://github.com/user-attachments/assets/c2ed9475-affb-44c2-a68c-c906296d1004)
+![9팀_덕후감_발표자료_page-0006](https://github.com/user-attachments/assets/5abc2022-677d-4980-a977-1383a5145750)
+![9팀_덕후감_발표자료_page-0007](https://github.com/user-attachments/assets/e65d1ce7-2250-4caa-80a0-a4f7eca8fd01)
+![9팀_덕후감_발표자료_page-0008](https://github.com/user-attachments/assets/96dae08b-1376-4538-95f8-f48e453f9ad4)
+![9팀_덕후감_발표자료_page-0009](https://github.com/user-attachments/assets/9232dd19-7535-494a-bb1e-5cb2c13bbee7)
+![9팀_덕후감_발표자료_page-0010](https://github.com/user-attachments/assets/21189bc7-92df-4d52-8f76-fe25deb31ce4)
+![9팀_덕후감_발표자료_page-0011](https://github.com/user-attachments/assets/2defa09d-c816-4f08-b1ed-db82ba3066c5)
+![9팀_덕후감_발표자료_page-0012](https://github.com/user-attachments/assets/417e03fa-453b-48d9-8a63-a797fe41f2bd)
+![9팀_덕후감_발표자료_page-0013](https://github.com/user-attachments/assets/1c4516bb-2d2a-469e-9c47-93d3ecdf4b7d)
+![9팀_덕후감_발표자료_page-0014](https://github.com/user-attachments/assets/c9f712f6-adeb-4ceb-9913-5ab6c3b7cc56)
+![9팀_덕후감_발표자료_page-0015](https://github.com/user-attachments/assets/7bbfef54-5830-4646-9a0d-b86b75dd7406)
+![9팀_덕후감_발표자료_page-0016](https://github.com/user-attachments/assets/c9a42b49-386d-4e79-bde2-07a7b785d10c)
+![9팀_덕후감_발표자료_page-0017](https://github.com/user-attachments/assets/2343a856-7e0e-467e-a77f-57ac92b22c31)
+![9팀_덕후감_발표자료_page-0018](https://github.com/user-attachments/assets/7fb2bcdd-4c37-4268-8088-2d6e93a7a247)
+![9팀_덕후감_발표자료_page-0019](https://github.com/user-attachments/assets/39afce92-a4a3-4993-83ce-73c487dd9939)
+![9팀_덕후감_발표자료_page-0020](https://github.com/user-attachments/assets/83c8226c-e6f1-48ce-8e00-6302b8a3ad2a)
+![9팀_덕후감_발표자료_page-0021](https://github.com/user-attachments/assets/7de17c2f-b63d-4059-9424-2f27e84c39f5)
+![9팀_덕후감_발표자료_page-0022](https://github.com/user-attachments/assets/a0340d4e-307d-479c-848b-02243b04734f)
+![9팀_덕후감_발표자료_page-0023](https://github.com/user-attachments/assets/7f52d050-1638-491d-a593-4af6d0e9b6b7)
